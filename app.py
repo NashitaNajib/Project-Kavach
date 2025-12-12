@@ -6,10 +6,21 @@ import hashlib
 import base64
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad
+import os
+from dotenv import load_dotenv
 
 # --- CONFIGURATION ---
-# ⚠️ PASTE YOUR API KEY HERE
-GOOGLE_API_KEY = "AIzaSyBbLAZtTxfiiNc4n8_JCAnj1ijYiUDUHrk " 
+# Load environment variables from .env file
+load_dotenv()
+
+# Fetch the key securely
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+
+# Check if key exists to prevent crashing
+if not GOOGLE_API_KEY:
+    st.error("⚠️ API Key not found! Please check your .env file.")
+    st.stop()
+
 genai.configure(api_key=GOOGLE_API_KEY)
 model = genai.GenerativeModel('models/gemini-2.5-flash')
 
